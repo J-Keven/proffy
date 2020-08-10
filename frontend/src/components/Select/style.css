@@ -1,0 +1,25 @@
+
+.select-block {
+  position: relative;
+  margin-bottom: 1.4rem;
+}
+
+.select-block label {
+  font-size: 1.4rem;
+}
+
+.select-block select {
+  width: 100%;
+  height: 5.6rem;
+  margin-top: 0.8rem;
+  border-radius: 0.8rem;
+  background: var(--color-input-background);
+  border: 1px solid var(--color-line-in-white);
+  padding: 0 1.6rem;
+  outline: 0;
+  font: 1.6rem Archivo;
+}
+
+.select-block select option:first {
+  color: var(--color-text-title);
+}
