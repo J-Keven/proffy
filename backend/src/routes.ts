@@ -5,6 +5,7 @@ import ConnectionController from './controllers/ConnectionsController'
 
 const routes = Router();
 
+routes.get('/', ClassesController.reload);
 routes.get('/classes', ClassesController.index);
 routes.post('/classes', ClassesController.create);
 routes.get('/connection', ConnectionController.index);

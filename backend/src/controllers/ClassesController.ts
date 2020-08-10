@@ -11,6 +11,11 @@ interface ScheduleItem {
 
 
 class ClassesController {
+  async reload(req: Request, res: Response) {
+      const data = await db("users").select("*")
+    return res.json(data)
+  };
+
   async index(req: Request, res: Response) {
     const filters = req.query;
 

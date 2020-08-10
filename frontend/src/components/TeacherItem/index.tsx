@@ -1,38 +1,55 @@
 import React from 'react'
 import WhatsappIcon from '../../assets/images/icons/whatsapp.svg'
 import "./style.css"
+import Api from '../../services/api'
 
-const TeacherItem = () => {
+interface TeacherPropsType {
+  teacher: {
+    id: number
+    subject: string,
+    cost: number,
+    name: string,
+    avatar: string,
+    whatsapp: string,
+    bio: string,
+  }
+}
+
+const TeacherItem: React.FC<TeacherPropsType> = ({teacher}) => {
+
+  const createNewConnection = async () => {
+    Api.post('connection', {
+      user_id: teacher.id
+    })
+  }
   return (
     <article className="teacher-item">
           <header>
-            <img src="https://avatars2.githubusercontent.com/u/50251304?s=460&u=f3ac62e5d926b4c8f2a8bc93e548ea7443ff5dbb&v=4" alt="j-keven"/>
+            <img src={teacher.avatar} alt={teacher.name}/>
             <div>
               <strong>
-                Jhonnas Keven
+                {teacher.name}
               </strong>
               <span>
-                Física
+                {teacher.subject}
               </span>
             </div>
           </header>
 
           <p>
-            Entusiasta das melhores tecnologias de química avançada.
-              <br/><br/>
-            Apaixonado por explodir coisas em laboratório e por mudar a vida das pessoas através de experiências. Mais de 200.000 pessoas já passaram por uma das minhas explosões.
+            {teacher.bio}
           </p>
 
           <footer>
             <p>
               Preço/Hora
-              <strong>R$ 100,00</strong>
+              <strong>R$ {teacher.cost}</strong>
             </p>
             
-            <button type="button"> 
+            <a target="_blank" rel="noopener noreferrer" href={`https://wa.me/${teacher.whatsapp}`} onClick={createNewConnection}> 
               <img src={WhatsappIcon} alt="whatsapp"/>
               Entre em contato
-            </button>
+            </a>
           </footer>
         </article>
         

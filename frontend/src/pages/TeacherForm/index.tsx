@@ -1,6 +1,6 @@
 import React, { useState, FormEvent } from  'react'
 import PageHeader from '../../components/PageHeader'
-
+import { useHistory } from 'react-router-dom'
 import WarnningIcon from '../../assets/images/icons/warning.svg'
 import Input from '../../components/Input'
 import Textarea from '../../components/TextArea'
@@ -9,11 +9,13 @@ import Select from '../../components/Select'
 import api from '../../services/api'
 
 export default function TeacherFomr() {
+
+  const history = useHistory();
   const [name, setName] = useState("")
   const [avatar, setAvatar] = useState("")
   const [whatsapp, setWhatsapp] = useState("")
   const [subject, setSubject] = useState("")
-  const [cust, setCust] = useState(0)
+  const [cost, setCost] = useState(0)
   const [bio, setBio] = useState("")
 
   const [schedule, setSchedule] = useState([{
@@ -30,7 +32,7 @@ export default function TeacherFomr() {
     )
   }
 
-  const setScheduleItem = (position: number, field: string, value: string) => {
+  const setScheduleItem = (position: number, field: string, value: string | number) => {
     const newArray = schedule.map((item, index) => {
       if(position === index) {
         return {...item, [field]: value}
@@ -41,20 +43,25 @@ export default function TeacherFomr() {
     setSchedule([...newArray])
   }
 
-  const handleCreateClasses =  (e: FormEvent) => {
+  const handleCreateClasses =  async (e: FormEvent) => {
     e.preventDefault();
 
-    api.post('classes', {
-      name,
-      avatar,
-      whatsapp,
-      subject,
-      cust,
-      bio,
-      schedule,
-    }).then(
-      
-    ).catch()
+    try {
+      await api.post('classes', {
+        name,
+        avatar,
+        whatsapp,
+        subject,
+        cost: Number(cost),
+        bio,
+        schedule,
+      })
+
+      history.push("/");
+    } catch (error) {
+      alert("Server Error")
+    }
+
   }
 
   return(
@@ -94,7 +101,7 @@ export default function TeacherFomr() {
                 {value: "Geografia", label: "Geografia"},
               ]
             }/>
-            <Input name="cust" label="Custo da sua hora por aular" value={cust} onChange={e => { setCust(Number(e.target.value))}}/>
+            <Input name="cost" label="Custo da sua hora por aular" value={cost} onChange={e => { setCost(Number(e.target.value))}}/>
             
             <Textarea label="Biografia" name="bio" value={bio} onChange={e => {setBio(e.target.value)}}/>
           </fieldset>
@@ -109,12 +116,12 @@ export default function TeacherFomr() {
             {
               schedule.map((item, index) => {
                 return (
-                  <div key={item.week_day} className="schedule-item">
+                  <div key={index} className="schedule-item">
                     <Select 
                       name="week_day" 
                       label="Dia da semana"
                       value={item.week_day}
-                      onChange={e => setScheduleItem(index, "week_day", e.target.value)}
+                      onChange={e => setScheduleItem(index, "week_day", Number(e.target.value))}
                       options={
                         [
                           {value: "0", label: "Domingo"},
